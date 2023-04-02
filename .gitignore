@@ -1,0 +1,4 @@
+.idea
+network/models/
+**/__pycache__/
+**/tmp/
