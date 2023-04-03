@@ -1,15 +1,21 @@
 package rest
 
 import (
-	"api/auth_manager"
-	"github.com/gorilla/sessions"
-	"github.com/labstack/echo"
-	"log"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo"
+	log "github.com/sirupsen/logrus"
+
+	"api/auth_manager"
 )
 
-const SessionCookieId = "Session-Id"
+const (
+	sessionUsername         = "username"
+	sessionFirstFactorAuth  = "first-factor-authenticated"
+	sessionSecondFactorAuth = "second-factor-authenticated"
+)
 
 type (
 	Server interface {
@@ -17,8 +23,8 @@ type (
 	}
 
 	server struct {
-		port        string
-		networkPort string
+		address        string
+		networkAddress string
 
 		e       *echo.Echo
 		store   *sessions.CookieStore
@@ -26,16 +32,15 @@ type (
 	}
 )
 
-func NewServer(port string, networkPort string, authmgr auth_manager.AuthManager) (Server, error) {
+func NewServer(address string, networkAddress string, storeHashKey []byte, authmgr auth_manager.AuthManager) (Server, error) {
 	s := server{
-		port:        port,
-		networkPort: networkPort,
-		e:           echo.New(),
-		authmgr:     authmgr,
+		address:        address,
+		networkAddress: networkAddress,
+		e:              echo.New(),
+		authmgr:        authmgr,
 	}
 
-	hashKey := []byte("my-secret-key-12345") // Replace with your own secret key
-	store := sessions.NewCookieStore(hashKey)
+	store := sessions.NewCookieStore(storeHashKey)
 
 	store.Options = &sessions.Options{
 		Path:     "/",
@@ -51,14 +56,18 @@ func NewServer(port string, networkPort string, authmgr auth_manager.AuthManager
 }
 
 func (s server) Start() {
-	s.e.POST("/auth/login", s.login)
-	s.e.POST("/auth/register", s.register)
+	s.e.Static("/", "./static")
 
-	s.e.GET("/test", test, s.authMiddleware())
+	s.e.POST("/auth", s.handleAuth)
+	s.e.POST("/auth/register", s.handleRegister)
+	s.e.POST("/auth/login", s.handleLogin)
+	s.e.POST("/auth/confirm", s.handleConfirm)
+
 	s.e.POST("/predict_text", s.handlePredictText, s.authMiddleware())
 	s.e.POST("/predict_link", s.handlePredictLink, s.authMiddleware())
 	s.e.POST("/predict_image", s.handlePredictImage, s.authMiddleware())
-	s.e.Logger.Fatal(s.e.Start("127.0.0.1:" + s.port))
+
+	s.e.Logger.Fatal(s.e.Start(s.address))
 }
 
 func (s server) authMiddleware() func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -66,11 +75,13 @@ func (s server) authMiddleware() func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			session, err := s.store.Get(c.Request(), "session-name")
 			if err != nil {
-				log.Println(err)
+				log.Error(err)
 				return c.String(http.StatusInternalServerError, err.Error())
 			}
 
-			if session.Values["authenticated"] != true {
+			log.Debugf("session: %+v", session)
+
+			if session.Values[sessionFirstFactorAuth] != true || session.Values[sessionSecondFactorAuth] != true {
 				return c.String(http.StatusUnauthorized, "unauthorized")
 			}
 			return next(c)
