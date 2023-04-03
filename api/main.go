@@ -21,7 +21,7 @@ func main() {
 		log.Fatal("failed to create auth mgr: %v", err)
 	}
 
-	server, err := rest.NewServer(os.Getenv("API_PORT"), authmgr)
+	server, err := rest.NewServer(os.Getenv("API_PORT"), os.Getenv("NETWORK_PORT"), authmgr)
 	if err != nil {
 		log.Fatal("failed to create server: %v", err)
 	}
