@@ -17,7 +17,8 @@ type (
 	}
 
 	server struct {
-		port string
+		port        string
+		networkPort string
 
 		e       *echo.Echo
 		store   *sessions.CookieStore
@@ -25,11 +26,12 @@ type (
 	}
 )
 
-func NewServer(port string, authmgr auth_manager.AuthManager) (Server, error) {
+func NewServer(port string, networkPort string, authmgr auth_manager.AuthManager) (Server, error) {
 	s := server{
-		port:    port,
-		e:       echo.New(),
-		authmgr: authmgr,
+		port:        port,
+		networkPort: networkPort,
+		e:           echo.New(),
+		authmgr:     authmgr,
 	}
 
 	hashKey := []byte("my-secret-key-12345") // Replace with your own secret key
@@ -53,6 +55,9 @@ func (s server) Start() {
 	s.e.POST("/auth/register", s.register)
 
 	s.e.GET("/test", test, s.authMiddleware())
+	s.e.POST("/predict_text", s.handlePredictText, s.authMiddleware())
+	s.e.POST("/predict_link", s.handlePredictLink, s.authMiddleware())
+	s.e.POST("/predict_image", s.handlePredictImage, s.authMiddleware())
 	s.e.Logger.Fatal(s.e.Start("127.0.0.1:" + s.port))
 }
 
