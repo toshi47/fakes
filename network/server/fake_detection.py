@@ -32,11 +32,8 @@ class TextFakeDetector(FakeDetection):
         super().__init__(model)
         self.vectorizer=load(vectorizer_path)
     def predict(self, sample):
-        answer=  super().predict(self.preprocessing(sample))
-        if answer[0]==0:
-            return 'Looks like the truth to me.'
-        else:
-            return 'Looks like fake...'
+        answer = super().predict(self.preprocessing(sample))
+        return answer[0]==1
         
     def preprocessing(self, data):
         clean_txt = []
@@ -52,10 +49,7 @@ class ImageFakeDetector(FakeDetection):
     def predict(self, sample):
         answer = super().predict(self.preprocessing(sample))
         i=np.argmax(answer[0])
-        if i==1:
-            return f'Image was modified with probability: {answer[0][i] * 100:.2f}%.'
-        else:
-            return f'Image was not modified with probability: {answer[0][i] * 100:.2f}%.'
+        return i==1, answer[0][i] * 100
     def preprocessing(self, img):
         filename = 'network/server/tmp/photo'
         resaved_filename = filename + '.resaved.jpg'

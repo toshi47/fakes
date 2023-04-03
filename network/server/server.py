@@ -46,9 +46,9 @@ class TextHandler(Resource):
         text=json['data']
         print(json['data'])
         try:
-            answer=TXT_DET.predict(text)
-            print("Text detector answer:",answer)
-            return jsonify({"answer":answer})
+            is_fake=TXT_DET.predict(text)
+            print("Text detector answer: fake {is_fake}")
+            return jsonify({"is_fake": bool(is_fake)})
         except Exception as e:
             return make_response(jsonify({"answer":e}),500)
 
@@ -56,12 +56,12 @@ class ImageHandler(Resource):
     def post(self):
         print("Entering image handler")
         json=request.get_json()
-        data=json['data']
         try:
-            img = Image.open(BytesIO(base64.b64decode(data)))
-            answer=IMG_DET.predict(img)
-            print("Image detector answer:",answer)
-            return jsonify({"answer":answer})
+            image_data = re.sub('^data:image/.+;base64,', '', json['data'])
+            img = Image.open(BytesIO(base64.b64decode(image_data)))
+            is_fake, probability =IMG_DET.predict(img)
+            print(f"Image detector answer: fake {is_fake} probability {probability}")
+            return jsonify({"is_fake":bool(is_fake), "probability": probability})
         except Exception as e:
             return make_response(jsonify({"answer":e}),500)
             
@@ -84,9 +84,9 @@ class LinkHandler(Resource):
                 if u.netloc in all_sourses.keys():
                     all_text += soup.body.find('div', attrs={'class': all_sourses[u.netloc]}).text.replace('\n', "")
                 print('Link text:', all_text)
-                answer=TXT_DET.predict(all_text) 
-                print("Text detector answer:",answer)
-                return jsonify({"answer":answer})
+                is_fake=TXT_DET.predict(all_text)
+                print("Text detector answer: fake {is_fake}")
+                return jsonify({"is_fake": bool(is_fake)})
             except Exception as e:
                 return make_response(jsonify({"answer":e}), 500)
 
