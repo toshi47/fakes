@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Login Page</title>
+	<meta charset="UTF-8">
+</head>
+<script type="text/javascript" src="script.js"></script>
+
+<body>
+	<form id="loginForm" onsubmit="submitLoginForm(event)">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username"><br><br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password"><br><br>
+		<button type="submit">Sign In</button>
+		<button type="button" onclick='window.location.href="/register.html"'>Sign Up</button>
+	</form>
+	<div id="result"></div>
+</body>
+
+</html>
