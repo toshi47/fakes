@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Predict Image</title>
+    <meta charset="UTF-8">
+</head>
+<script type="text/javascript" src="/script.js"></script>
+
+<body onload="auth();">
+    <form id="confirmationForm" onchange="previewImage(event)" onsubmit="submitPredictImage(event)">
+        <input type="file" id="image_file" accept="image/jpeg">
+        <button type="submit">Upload Image</button>
+    </form>
+    <img id="preview" src="" alt="Preview of selected image" style="display:none;">
+    <div id="result"></div>
+</body>
+
+</html>

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/smtp"
 
-	"github.com/labstack/gommon/log"
 	"github.com/labstack/gommon/random"
+	log "github.com/sirupsen/logrus"
 )
 
 type (

@@ -47,7 +47,7 @@ class TextHandler(Resource):
         print(json['data'])
         try:
             is_fake=TXT_DET.predict(text)
-            print("Text detector answer: fake {is_fake}")
+            print(f"Text detector answer: fake {is_fake}")
             return jsonify({"is_fake": bool(is_fake)})
         except Exception as e:
             return make_response(jsonify({"answer":e}),500)
@@ -85,7 +85,7 @@ class LinkHandler(Resource):
                     all_text += soup.body.find('div', attrs={'class': all_sourses[u.netloc]}).text.replace('\n', "")
                 print('Link text:', all_text)
                 is_fake=TXT_DET.predict(all_text)
-                print("Text detector answer: fake {is_fake}")
+                print(f"Text detector answer: fake {is_fake}")
                 return jsonify({"is_fake": bool(is_fake)})
             except Exception as e:
                 return make_response(jsonify({"answer":e}), 500)

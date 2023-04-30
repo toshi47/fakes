@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Predict Link</title>
+	<meta charset="UTF-8">
+</head>
+<script type="text/javascript" src="/script.js"></script>
+
+<body onload="auth();">
+	<form id="predictionForm" onsubmit="submitPredictLink(event)">
+		<label for="link">Link to predict:</label>
+		<input type="text" id="link" style="width: 1000px" required></textarea>
+		<button type="submit"">Submit</button>
+    </form>
+	<div id="result"></div>
+</body>
+
+</html>
