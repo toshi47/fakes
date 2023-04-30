@@ -14,7 +14,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("failed to load enviroment: %v", err)
+		log.Warnf("failed to load environment: %v", err)
 	}
 
 	logLevel, err := strconv.Atoi(os.Getenv("LOG_LEVEL"))
@@ -41,9 +41,7 @@ func main() {
 		log.Fatalf("failed to create auth mgr: %v", err)
 	}
 
-	serverAddr := "127.0.0.1:" + os.Getenv("API_PORT")
-	networkAddr := "127.0.0.1:" + os.Getenv("NETWORK_PORT")
-	server, err := rest.NewServer(serverAddr, networkAddr, []byte(os.Getenv("COOKIE_STORE_HASH_KEY")), authmgr)
+	server, err := rest.NewServer(os.Getenv("API_ADDRESS"), os.Getenv("NETWORK_ADDRESS"), []byte(os.Getenv("COOKIE_STORE_HASH_KEY")), authmgr)
 	if err != nil {
 		log.Fatalf("failed to create server: %v", err)
 	}
