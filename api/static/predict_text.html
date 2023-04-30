@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Predict Text</title>
+	<meta charset="UTF-8">
+</head>
+<script type="text/javascript" src="/script.js"></script>
+
+<body onload="auth();">
+	<form id="predictionForm" style="display:flex;flex-direction: column" onsubmit="submitPredictText(event)">
+		<label for="text">Text to predict:</label>
+		<textarea id="text" rows="40" cols="50" required></textarea>
+		<button type="submit" style="width: 100px;">Submit</button>
+	</form>
+	<div id="result"></div>
+</body>
+
+</html>

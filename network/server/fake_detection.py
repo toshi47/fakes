@@ -51,7 +51,7 @@ class ImageFakeDetector(FakeDetection):
         i=np.argmax(answer[0])
         return i==1, answer[0][i] * 100
     def preprocessing(self, img):
-        filename = 'network/server/tmp/photo'
+        filename = './tmp/photo'
         resaved_filename = filename + '.resaved.jpg'
         im =img.convert('RGB')
         im.save(resaved_filename, 'JPEG', quality=90)
