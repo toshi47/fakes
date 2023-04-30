@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  api:
+    build: ./api
+    ports:
+      - 80:${API_PORT}
+    environment:
+      - API_ADDRESS=api:${API_PORT}
+      - NETWORK_ADDRESS=network:${NETWORK_PORT}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - COOKIE_STORE_HASH_KEY=${COOKIE_STORE_HASH_KEY}
+      - EMAIL_ADDRESS=${EMAIL_ADDRESS}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+
+  network:
+    build: 
+      context: ./network
+      args:
+        - TEXT_DATASET_PATH=${TEXT_DATASET_PATH}
+        - TEXT_MODEL_PATH=${TEXT_MODEL_PATH}
+        - TEXT_PREPROCESSOR_PATH=${TEXT_PREPROCESSOR_PATH}
+    environment:
+      - NETWORK_HOST=network
+      - NETWORK_PORT=${NETWORK_PORT}
+      - TEXT_PREPROCESSOR_PATH=${TEXT_PREPROCESSOR_PATH}
+      - TEXT_MODEL_PATH=${TEXT_MODEL_PATH}
+      - IMG_MODEL_PATH=${IMG_MODEL_PATH}
+      - TEXT_DATASET_PATH=${TEXT_DATASET_PATH}

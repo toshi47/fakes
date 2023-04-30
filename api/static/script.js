@@ -5,6 +5,10 @@ function doRequest(url, request, goodLocation) {
             response.text().then(text => {
                 try {
                     const data = JSON.parse(text)
+                    if (response.status != 200) {
+                        document.getElementById("result").textContent = data["error"]
+                        return
+                    }
                     let msg = "this is "
                     if (data["is_fake"] == false) {
                         msg += "not "

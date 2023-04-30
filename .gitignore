@@ -1,5 +1,7 @@
 .idea
-network/models/
+network/models/trained
+**/*.whl
+**/*.csv
 **/__pycache__/
 **/tmp/
 **/.env

@@ -3,11 +3,6 @@ from nltk.tokenize import word_tokenize
 import pymorphy2
 import regex as re
 import nltk
-nltk.download("all")
-nltk.download('stopwords')
-stop_words = stopwords.words("russian")
-morph=pymorphy2.MorphAnalyzer(lang='ru')    
-stop_words = stopwords.words("russian")
 
 import numpy as np
 from PIL import Image, ImageChops, ImageEnhance
@@ -31,6 +26,11 @@ class TextFakeDetector(FakeDetection):
     def __init__(self,model,vectorizer_path):
         super().__init__(model)
         self.vectorizer=load(vectorizer_path)
+        nltk.download('stopwords')
+        nltk.download('punkt')
+        self.stop_words = stopwords.words("russian")
+        self.morph=pymorphy2.MorphAnalyzer(lang='ru')    
+
     def predict(self, sample):
         answer = super().predict(self.preprocessing(sample))
         return answer[0]==1
@@ -38,7 +38,7 @@ class TextFakeDetector(FakeDetection):
     def preprocessing(self, data):
         clean_txt = []
         tokenized_sent = word_tokenize(data.lower().strip(),language="russian")
-        tokenized_sent=[morph.parse(x)[0].normal_form for x in tokenized_sent if x not in stop_words and (re.sub(r'[^\w\s]', '', x)!='') and re.search(r'[0-9]+',x) is None and re.search(r'[_a]+',x) is None]
+        tokenized_sent=[self.morph.parse(x)[0].normal_form for x in tokenized_sent if x not in self.stop_words and (re.sub(r'[^\w\s]', '', x)!='') and re.search(r'[0-9]+',x) is None and re.search(r'[_a]+',x) is None]
         clean_txt.append(' '.join(tokenized_sent))
         vectorized_txt = self.vectorizer.transform(clean_txt)
         return vectorized_txt
