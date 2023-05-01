@@ -1,0 +1,23 @@
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name ${FAKES_DEPLOY_SERVER_ADDRESS};
+
+    ssl_certificate /etc/ssl/certs/fakes.crt;
+    ssl_certificate_key /etc/ssl/private/fakes.key;
+    ssl_dhparam /etc/ssl/certs/fakes.pem;
+    ssl_protocols TLSv1.3;
+
+    rewrite  ^/$  /index.html  last;
+
+    location ~ ^.*\.(html|js)$ { 
+        root /var/www/static;
+    }
+
+    location / {
+        if ( $request_method = POST ) {
+            proxy_pass http://${API_ADDRESS};
+        }
+    }
+}

@@ -1,10 +1,21 @@
 version: "3"
 
 services:
+  nginx:
+    image: nginx:stable
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/certs:/etc/ssl/certs
+      - ./nginx/private:/etc/ssl/private
+      - ./nginx/static:/var/www/static
+    ports:
+      - "443:443"
+    environment:
+      - FAKES_DEPLOY_SERVER_ADDRESS=${FAKES_DEPLOY_SERVER_ADDRESS}
+      - API_ADDRESS=api:${API_PORT}
+
   api:
     build: ./api
-    ports:
-      - 80:${API_PORT}
     environment:
       - API_ADDRESS=api:${API_PORT}
       - NETWORK_ADDRESS=network:${NETWORK_PORT}
@@ -16,7 +27,7 @@ services:
       - SMTP_PORT=${SMTP_PORT}
 
   network:
-    build: 
+    build:
       context: ./network
       args:
         - TEXT_DATASET_PATH=${TEXT_DATASET_PATH}
