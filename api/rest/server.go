@@ -56,8 +56,6 @@ func NewServer(address string, networkAddress string, storeHashKey []byte, authm
 }
 
 func (s server) Start() {
-	s.e.Static("/", "./static")
-
 	s.e.POST("/auth", s.handleAuth)
 	s.e.POST("/auth/register", s.handleRegister)
 	s.e.POST("/auth/login", s.handleLogin)
