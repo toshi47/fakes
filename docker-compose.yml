@@ -40,3 +40,12 @@ services:
       - TEXT_MODEL_PATH=${TEXT_MODEL_PATH}
       - IMG_MODEL_PATH=${IMG_MODEL_PATH}
       - TEXT_DATASET_PATH=${TEXT_DATASET_PATH}
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    environment:
+      - SWAGGER_JSON=/etc/swagger/openapi.json
+    volumes:
+      - ./openapi.json:/etc/swagger/openapi.json
+    ports:
+      - "8080:8080"
