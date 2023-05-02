@@ -2,18 +2,26 @@
 <html>
 
 <head>
-	<title>Predict Link</title>
+	<link rel="stylesheet" href="/styles.css">
+	<title>Fake Detector</title>
 	<meta charset="UTF-8">
 </head>
 <script type="text/javascript" src="/script.js"></script>
 
 <body onload="auth();">
-	<form id="predictionForm" onsubmit="submitPredictLink(event)">
+<header>
+	<a href="/index.html">
+		<img class="logo" src="/logo.png" alt="logo">
+	</a>
+</header>
+<div class="login-form">
+	<form class="link-form" id="predictionForm" onsubmit="submitPredictLink(event)">
 		<label for="link">Link to predict:</label>
-		<input type="text" id="link" style="width: 1000px" required></textarea>
-		<button type="submit"">Submit</button>
-    </form>
+		<input type="text" class="link-input" id="link" required>
+		<button type="submit">Submit</button>
+	</form>
 	<div id="result"></div>
+</div>
 </body>
 
 </html>

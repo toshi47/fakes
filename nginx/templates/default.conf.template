@@ -11,7 +11,7 @@ server {
 
     rewrite  ^/$  /index.html  last;
 
-    location ~ ^.*\.(html|js)$ { 
+    location ~ ^.*\.(html|js|css|png|ttf)$ { 
         root /var/www/static;
     }
 

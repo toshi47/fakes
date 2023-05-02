@@ -2,21 +2,31 @@
 <html>
 
 <head>
-	<title>Login Page</title>
-	<meta charset="UTF-8">
+    <title>Fake Detector</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <script type="text/javascript" src="/script.js"></script>
 
 <body>
-	<form id="loginForm" onsubmit="submitLoginForm(event)">
-		<label for="username">Username:</label>
-		<input type="text" id="username" name="username"><br><br>
-		<label for="password">Password:</label>
-		<input type="password" id="password" name="password"><br><br>
-		<button type="submit">Sign In</button>
-		<button type="button" onclick='window.location.href="/register.html"'>Sign Up</button>
-	</form>
-	<div id="result"></div>
+<header>
+    <a href="/index.html">
+        <img class="logo" src="/logo.png" alt="logo">
+    </a>
+</header>
+<div class="login-form">
+    <form id="loginForm" onsubmit="submitLoginForm(event)">
+        <h1 class="login-form__title">Login</h1>
+        <label for="username">Username:</label>
+        <input type="text" class="text-input" id="username" name="username"><br><br>
+        <label for="password">Password:</label>
+        <input type="password"  class="text-input" id="password" name="password"><br><br>
+        <button class="sign-in" type="submit">Sign In</button>
+        <button type="button" onclick='window.location.href="/register.html"'>Sign Up</button>
+    </form>
+    <div id="result">
+    </div>
+</div>
 </body>
 
 </html>

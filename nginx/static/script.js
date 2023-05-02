@@ -6,6 +6,7 @@ function doRequest(url, request, goodLocation) {
                 try {
                     const data = JSON.parse(text)
                     if (response.status != 200) {
+                        document.getElementById("result").className = "error"
                         document.getElementById("result").textContent = data["error"]
                         return
                     }
@@ -17,8 +18,10 @@ function doRequest(url, request, goodLocation) {
                     if (data["probability"] != null) {
                         msg += " with probability " + data["probability"].toFixed(2)
                     }
+                    document.getElementById("result").className = "success"
                     document.getElementById("result").textContent = msg
                 } catch (err) {
+                    document.getElementById("result").className = "error"
                     document.getElementById("result").textContent = text
                 }
             })
@@ -36,6 +39,7 @@ function doRequest(url, request, goodLocation) {
         })
         .catch(error => {
             console.error(error.message);
+            document.getElementById("result").className = "error"
             document.getElementById("result").textContent = error.message;
         });
 }
@@ -139,6 +143,7 @@ function submitPredictImage(event) {
 function validatePassword(event) {
     event.preventDefault();
     if (document.getElementById("password").value != document.getElementById("password_confirmation").value) {
+        document.getElementById("result").className = "error"
         document.getElementById("result").textContent = "passwords don't match!";
         return false;
     }
