@@ -11,6 +11,8 @@ server {
 
     rewrite  ^/$  /index.html  last;
 
+    add_header X-Frame-Options "SAMEORIGIN";
+
     location ~ ^.*\.(html|js|css|png|ttf)$ { 
         root /var/www/static;
     }
