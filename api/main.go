@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -31,7 +32,8 @@ func main() {
 	log.SetLevel(log.Level(logLevel))
 	log.SetReportCaller(true)
 
-	authmgr, err := auth_manager.New(auth_manager.EmailInfo{
+	dbUrl := fmt.Sprintf("postgres://%s:%s@%s/%s", os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_ADDRESS"), os.Getenv("POSTGRES_DB"))
+	authmgr, err := auth_manager.New(dbUrl, auth_manager.EmailInfo{
 		Address:  os.Getenv("EMAIL_ADDRESS"),
 		Password: os.Getenv("EMAIL_PASSWORD"),
 		SmtpHost: os.Getenv("SMTP_HOST"),
