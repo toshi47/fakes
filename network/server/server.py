@@ -12,6 +12,7 @@ from flask_restful import Resource, Api
 from fake_detection import TextFakeDetector,ImageFakeDetector
 from decouple import config
 import pickle
+import sys
 
 TXT_DET = None
 IMG_DET = None
@@ -70,7 +71,9 @@ class LinkHandler(Resource):
             all_text = ''
             source=data
             u = urlparse(source)
-            html_text = requests.get(source).text
+            response = requests.get(source)
+            print(f'response is {response.content}', file=sys.stderr)
+            html_text = response.text
             soup = BeautifulSoup(html_text, 'html.parser')
             all_text += soup.body.find('h1').text.replace('\n', "")
             if u.netloc in all_sourses.keys():
